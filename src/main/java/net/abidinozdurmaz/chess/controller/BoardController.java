@@ -20,8 +20,12 @@ public class BoardController {
     }
 
     @PostMapping("/move")
-    public Square[][] setBoard(@RequestBody Square square){
-        squareArray[square.getX()][square.getY()]= square;
+    public Square[][] setBoard(@RequestBody Square square,int x,int y){
+
+        squareArray[square.getX()][square.getY()]= null;
+        square.setX(x);
+        square.setY(y);
+        squareArray[x][y]=square;
         return squareArray;
     }
 

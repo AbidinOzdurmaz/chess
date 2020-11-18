@@ -41,8 +41,8 @@ public class BoardController {
 
     @PostMapping("/move")
     public ChessBoard move(@RequestBody ChessBoard chessBoard){
-        this.chessBoard=movePrediction.board(chessBoard);
-        return movePrediction.board(chessBoard);
+        this.chessBoard=movePrediction.changeBoard(chessBoard);
+        return movePrediction.changeBoard(chessBoard);
 
     }
 }

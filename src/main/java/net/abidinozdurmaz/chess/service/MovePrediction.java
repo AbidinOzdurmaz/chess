@@ -13,7 +13,7 @@ public class MovePrediction {
 
     Random r=new Random();
 
-    public ChessBoard board(ChessBoard chessBoard){
+    public ChessBoard changeBoard(ChessBoard chessBoard){
         List<Square[][]> possibleBoards2=new ArrayList<>();
         Square[][] temp = chessBoard.getSquares();
 

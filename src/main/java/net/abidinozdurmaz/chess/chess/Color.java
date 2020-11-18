@@ -1,5 +1,5 @@
 package net.abidinozdurmaz.chess.chess;
 
-public enum PieceColor {
+public enum Color {
     WHITE,BLACK
 }

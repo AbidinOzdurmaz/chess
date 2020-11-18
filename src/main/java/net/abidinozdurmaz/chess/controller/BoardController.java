@@ -1,41 +1,48 @@
 package net.abidinozdurmaz.chess.controller;
 
+import net.abidinozdurmaz.chess.chess.ChessBoard;
+import net.abidinozdurmaz.chess.chess.Color;
 import net.abidinozdurmaz.chess.chess.Square;
+import net.abidinozdurmaz.chess.service.MovePrediction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.PostConstruct;
 
 
 @RestController
 @RequestMapping("api")
 public class BoardController {
 
+    private ChessBoard chessBoard;
     private Square[][] squareArray;
 
-    public BoardController(){
-        squareArray =new Square[8][8];
+    @Autowired
+    private MovePrediction movePrediction;
+
+
+    @PostConstruct
+    private void postConstruct(){
+        chessBoard=new ChessBoard();
+        squareArray = chessBoard.startingSequence();
+        chessBoard.setSquares(squareArray);
+        chessBoard.setMoveOrder(Color.WHITE);
     }
 
     @GetMapping(produces = "application/json")
-    public Square[][] showBoard(){
-        return squareArray;
-    }
-
-    @PostMapping("/move")
-    public Square[][] setBoard(@RequestBody Square square,int x,int y){
-
-        squareArray[square.getX()][square.getY()]= null;
-        square.setX(x);
-        square.setY(y);
-        squareArray[x][y]=square;
-        return squareArray;
+    public ChessBoard showChessBoard(){
+        return chessBoard;
     }
 
     @GetMapping(value = "reset",produces = "application/json")
     public void resetBoard(){
-        for (int i = 0; i < squareArray.length; i++) {
-            for (int j = 0; j < squareArray.length ; j++) {
-                squareArray[i][j]=null;
-            }
-        }
+        squareArray = chessBoard.startingSequence();
     }
 
+    @PostMapping("/move")
+    public ChessBoard move(@RequestBody ChessBoard chessBoard){
+        this.chessBoard=movePrediction.board(chessBoard);
+        return movePrediction.board(chessBoard);
+
+    }
 }

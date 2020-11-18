@@ -10,9 +10,8 @@ import lombok.*;
 public class Square {
 
     private Piece piece;
-    private PieceColor pieceColor;
-    private int x;
-    private int y;
+    private Color color;
+
 
 
 }

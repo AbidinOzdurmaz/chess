@@ -1,7 +1,9 @@
 package net.abidinozdurmaz.chess.service;
 
-
-import net.abidinozdurmaz.chess.chess.*;
+import net.abidinozdurmaz.chess.chess.ChessBoard;
+import net.abidinozdurmaz.chess.chess.Color;
+import net.abidinozdurmaz.chess.chess.Piece;
+import net.abidinozdurmaz.chess.chess.Square;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,43 +15,61 @@ public class MovePrediction {
 
     Random r=new Random();
 
-    public ChessBoard changeBoard(ChessBoard chessBoard){
-        List<Square[][]> possibleBoards2=new ArrayList<>();
+    public ChessBoard changeBoard(ChessBoard chessBoard) {
+        List<Square[][]> possibleBoards=new ArrayList<>();
         Square[][] temp = chessBoard.getSquares();
 
         for (int i = 0; i < temp.length; i++) {
+            for (int j = 0; j < temp.length; j++) {
 
-            //piyonun bir adım önce çıkması
+                if (temp[i][j]!=null) {
+                    if (chessBoard.getMoveOrder()==Color.WHITE) {
 
-            Square[][] squares = new Square[8][8];
+                        if (temp[i][j].getPiece() == Piece.PAWN && temp[i][j].getColor() == Color.WHITE) {
 
-            squares= copySquareArray(squares,temp);
+                            if (j == 1) {
+                                Square[][] squares = new Square[8][8];
+                                copySquareArray(squares, temp);
+                                squares[i][j + 2] = temp[i][j];
+                                squares[i][j] = null;
+                                possibleBoards.add(squares);
+                            }
+                            Square[][] squares = new Square[8][8];
+                            copySquareArray(squares, temp);
 
-            squares[i][2]=temp[i][1];
+                            squares[i][j + 1] = temp[i][j];
+                            squares[i][j] = null;
+                            possibleBoards.add(squares);
+                        }
+                    }
+                    else if (chessBoard.getMoveOrder()==Color.BLACK) {
 
-            squares[i][1]=null;
+                            if (temp[i][j].getPiece()==Piece.PAWN && temp[i][j].getColor()==Color.BLACK){
 
-            possibleBoards2.add(squares);
+                                if (j==6){
+                                    Square[][] squares=new Square[8][8];
+                                    copySquareArray(squares,temp);
+                                    squares[i][j-2] = temp[i][j];
+                                    squares[i][j]=null;
+                                    possibleBoards.add(squares);
+                                }
+                                Square[][] squares=new Square[8][8];
+                                copySquareArray(squares,temp);
+                                squares[i][j-1] = temp[i][j];
+                                squares[i][j]=null;
+                                possibleBoards.add(squares);
+                            }
+                        }
 
-            //piyonun 2 adım öne çıkması
-
-            Square[][] squares2 = new Square[8][8];
-
-            squares2= copySquareArray(squares2,temp);
-
-            squares2[i][3]=temp[i][1];
-
-            squares2[i][1]=null;
-
-            possibleBoards2.add(squares2);
+                }
+            }
         }
 
-        chessBoard.setSquares(guess(possibleBoards2));
+        chessBoard.setSquares(guess(possibleBoards));
         chessBoard.setMoveOrder(changeMoveOrder(chessBoard.getMoveOrder()));
         return chessBoard;
     }
 
-    //rastgele square döndürür
     public Square[][] guess(List<Square[][]> possibleBoards){
         if (possibleBoards.size()>0){
             int index = r.nextInt(possibleBoards.size());
@@ -74,10 +94,5 @@ public class MovePrediction {
         }
         return Color.BLACK;
     }
-
-
-
-
-
 
 }

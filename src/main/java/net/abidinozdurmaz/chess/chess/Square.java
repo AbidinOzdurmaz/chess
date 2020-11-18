@@ -12,6 +12,4 @@ public class Square {
     private Piece piece;
     private Color color;
 
-
-
 }

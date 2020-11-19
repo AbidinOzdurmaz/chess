@@ -31,7 +31,7 @@ public class MovePrediction {
 
                         //piyon 2 kare gitme
                         //eğer j=1 ise ve 2 önü boşsa gidebilir
-                            if (j == 1 && temp[i][j+2]==null) {
+                            if (j == 1 && temp[i][j+2]==null &&temp[i][j+1]==null) {
                                 Square[][] squares = new Square[8][8];
                                 squares=copySquareArray(squares, temp);
                                 squares[i][j + 2] = temp[i][j];
@@ -108,7 +108,7 @@ public class MovePrediction {
 
                                 //piyon 2 kare gitme
                                 //eğer j=6 ise ve 2 önü boşsa gidebilir
-                                if (j==6 && temp[i][j-2]==null){
+                                if (j==6 && temp[i][j-2]==null && temp[i][j-1]==null){
                                     Square[][] squares=new Square[8][8];
                                     squares=copySquareArray(squares, temp);
                                     squares[i][j-2] = temp[i][j];

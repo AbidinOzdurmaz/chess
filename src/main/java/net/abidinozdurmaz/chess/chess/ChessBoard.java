@@ -54,5 +54,15 @@ public class ChessBoard {
         return squares;
     }
 
+    public Square[][] cloneBoard(){
+        Square[][] squares = new Square[8][8];
+        for (int j = 0; j < squares.length; j++) {
+            for (int k = 0; k < squares.length; k++) {
+                squares[j][k] = this.squares[j][k];
+            }
+        }
+        return squares;
+    }
+
 
 }

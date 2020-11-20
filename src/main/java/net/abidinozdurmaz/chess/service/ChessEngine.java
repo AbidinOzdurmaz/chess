@@ -57,14 +57,14 @@ public class ChessEngine {
 
                                     //piyon sağ çapraza yeme i = 7 olursa arrayden dışarı çıkar
                                     //çaprazında bir taş varsa yiyebilir ve o taş rakibinse
-                                    if (i!=7 && initalState[i+1][j+1]!=null && initalState[i+1][j+1].getColor()==Color.BLACK){
+                                    if (i!=7 && initalState[i+1][j+1]!=null && initalState[i+1][j+1].getColor()!=chessBoard.getMoveOrder()){
 
                                         Square[][] squares=chessBoard.cloneBoard();
 
 
                                         //vezir olma durumu kontrol ediliyor
                                         if(j==6){
-                                            squares[i+1][j + 1] = new Square(Piece.QUEEN,Color.WHITE);
+                                            squares[i+1][j + 1] = new Square(Piece.QUEEN,chessBoard.getMoveOrder());
                                             squares[i][j]=null;
                                             addPossibleBoards(chessBoard.getMoveOrder(),squares);
                                         }
@@ -80,14 +80,14 @@ public class ChessEngine {
 
                                     //piyon sol çapraza yeme i = 0 olursa arrayden dışarı çıkar
                                     //çaprazında bir taş varsa yiyebilir ve o taş rakibinse
-                                    if (i!=0 && initalState[i-1][j+1] != null && initalState[i-1][j+1].getColor()==Color.BLACK){
+                                    if (i!=0 && initalState[i-1][j+1] != null && initalState[i-1][j+1].getColor()!=chessBoard.getMoveOrder()){
 
                                         Square[][] squares=chessBoard.cloneBoard();
 
 
                                         //vezir olma durumu kontrol ediliyor
                                         if(j==6){
-                                            squares[i-1][j + 1] = new Square(Piece.QUEEN,Color.WHITE);
+                                            squares[i-1][j + 1] = new Square(Piece.QUEEN,chessBoard.getMoveOrder());
                                             squares[i][j]=null;
                                             addPossibleBoards(chessBoard.getMoveOrder(),squares);
                                         }
@@ -100,7 +100,7 @@ public class ChessEngine {
 
                                     }
 
-                                    //eğer önü boşsa gidebilir
+                                    //eğer önü boş ise gidebilir
 
                                     if (initalState[i][j+1]==null){
 
@@ -109,7 +109,7 @@ public class ChessEngine {
 
                                         //eğer son kareye gelmişse vezire dönüşebilir
                                         if(j==6){
-                                            squares[i][j + 1] = new Square(Piece.QUEEN,Color.WHITE);
+                                            squares[i][j + 1] = new Square(Piece.QUEEN,chessBoard.getMoveOrder());
                                             squares[i][j]=null;
                                             addPossibleBoards(chessBoard.getMoveOrder(),squares);
                                         }
@@ -121,9 +121,9 @@ public class ChessEngine {
                                     }
                                 }
 
-
                                 break;
                             }
+
                         }
 
                     }

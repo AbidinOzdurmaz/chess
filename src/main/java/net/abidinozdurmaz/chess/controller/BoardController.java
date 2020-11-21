@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 public class BoardController {
 
 
-
     private final ChessEngine chessEngine;
 
     @Autowired
@@ -20,7 +19,7 @@ public class BoardController {
     }
 
     @PostMapping("/move")
-    public ChessBoard move(@RequestBody ChessBoard chessBoard){
+    public ChessBoard move(@RequestBody ChessBoard chessBoard) {
 
         return chessEngine.move(chessBoard);
 

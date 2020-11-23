@@ -15,18 +15,18 @@ public class ChessEngine {
 
     Random r = new Random();
     List<Square[][]> possibleBoards;
-    ChessBoard cBoard;
+    ChessBoard chessBoard;
 
     public ChessBoard move(ChessBoard chessBoard) {
-
-        cBoard = chessBoard;
-        possibleBoards = new ArrayList<>();
 
 
         //burada eğer taşımız siyahsa simetri alıyoruz.
         if (chessBoard.getMoveOrder() == Color.BLACK) {
             chessBoard.setSquares(spinBoard(chessBoard.getSquares()));
         }
+        possibleBoards = new ArrayList<>();
+        this.chessBoard = chessBoard;
+
 
         for (int i = 0; i < chessBoard.getSquares().length; i++) {
             for (int j = 0; j < chessBoard.getSquares().length; j++) {
@@ -37,7 +37,11 @@ public class ChessEngine {
 
                         switch (chessBoard.getSquares()[i][j].getPiece()) {
                             case PAWN: {
-                                possibleBoards.addAll(calculatePawnMoves(chessBoard, i, j));
+                                possibleBoards.addAll(calculatePawnMoves(i, j));
+                                break;
+                            }
+                            case KING:{
+                                possibleBoards.addAll(calculateKingMoves(i,j));
                                 break;
                             }
                         }
@@ -49,7 +53,7 @@ public class ChessEngine {
         return chessBoard;
     }
 
-    private List<Square[][]> calculatePawnMoves(ChessBoard chessBoard, int i, int j) {
+    private List<Square[][]> calculatePawnMoves(int i, int j) {
 
         List<Square[][]> pawnPossibleBoards = new ArrayList<>();
 
@@ -125,6 +129,73 @@ public class ChessEngine {
         return pawnPossibleBoards;
     }
 
+    private List<Square[][]> calculateKingMoves(int i, int j){
+        List<Square[][]> kingPossibleBoards = new ArrayList<>();
+
+        //şah bir hamle öne gitme
+        if (j!=7 && chessBoard.getSquares()[i][j + 1] == null){
+            Square[][] squares = chessBoard.cloneBoard();
+            squares[i][j + 1] = chessBoard.getSquares()[i][j];
+            squares[i][j] = null;
+            kingPossibleBoards.add(squares);
+        }
+        //şah bir hamle geriye gitme
+        if (j!=0 && chessBoard.getSquares()[i][j - 1] == null){
+            Square[][] squares = chessBoard.cloneBoard();
+            squares[i][j - 1] = chessBoard.getSquares()[i][j];
+            squares[i][j] = null;
+            kingPossibleBoards.add(squares);
+        }
+        //şah bir hamle sola gitme
+        if (i!=0 && chessBoard.getSquares()[i-1][j] == null){
+            Square[][] squares = chessBoard.cloneBoard();
+            squares[i-1][j] = chessBoard.getSquares()[i][j];
+            squares[i][j] = null;
+            kingPossibleBoards.add(squares);
+        }
+        //şah bir hamle sağa gitme
+        if (i!=7 && chessBoard.getSquares()[i+1][j] == null ){
+            Square[][] squares = chessBoard.cloneBoard();
+            squares[i+1][j] = chessBoard.getSquares()[i][j];
+            squares[i][j] = null;
+            kingPossibleBoards.add(squares);
+        }
+        //şah sağ üst çapraz gitme
+        if (i!=7 && j!=7 && chessBoard.getSquares()[i+1][j+1] == null ){
+            Square[][] squares = chessBoard.cloneBoard();
+            squares[i+1][j+1] = chessBoard.getSquares()[i][j];
+            squares[i][j] = null;
+            kingPossibleBoards.add(squares);
+        }
+        //şah sol üst çapraz gitme
+        if (i!=0 && j!=7 && chessBoard.getSquares()[i-1][j+1] == null ){
+            Square[][] squares = chessBoard.cloneBoard();
+            squares[i-1][j+1] = chessBoard.getSquares()[i][j];
+            squares[i][j] = null;
+            kingPossibleBoards.add(squares);
+        }
+        //şah sağ alt çapraz gitme
+        if (i!=7 && j!=0 && chessBoard.getSquares()[i+1][j-1] == null ){
+            Square[][] squares = chessBoard.cloneBoard();
+            squares[i+1][j-1] = chessBoard.getSquares()[i][j];
+            squares[i][j] = null;
+            kingPossibleBoards.add(squares);
+        }
+        //şah sol alt çapraz gitme
+        if (i!=0 && j!=0 && chessBoard.getSquares()[i-1][j-1] == null ){
+            Square[][] squares = chessBoard.cloneBoard();
+            squares[i-1][j-1] = chessBoard.getSquares()[i][j];
+            squares[i][j] = null;
+            kingPossibleBoards.add(squares);
+        }
+
+        if (chessBoard.getMoveOrder() == Color.BLACK) {
+            return spinBoard(kingPossibleBoards);
+        }
+        return kingPossibleBoards;
+    }
+
+
     private Square[][] guess(List<Square[][]> possibleBoards) {
         if (possibleBoards.size() > 0) {
             int index = r.nextInt(possibleBoards.size());
@@ -166,7 +237,7 @@ public class ChessEngine {
     }
 
     private void movePiece(Square[][] squares, int startX, int startY, int endX, int endY) {
-        squares[endX][endY] = cBoard.getSquares()[startX][startX];
+        squares[endX][endY] = this.chessBoard.getSquares()[startX][startX];
         squares[startX][startY] = null;
     }
 

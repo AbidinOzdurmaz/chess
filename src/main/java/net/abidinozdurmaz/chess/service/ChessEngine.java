@@ -5,7 +5,6 @@ import net.abidinozdurmaz.chess.chess.Color;
 import net.abidinozdurmaz.chess.chess.Piece;
 import net.abidinozdurmaz.chess.chess.Square;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -13,9 +12,9 @@ import java.util.Random;
 @Service
 public class ChessEngine {
 
-    Random r = new Random();
-    List<Square[][]> possibleBoards;
-    ChessBoard chessBoard;
+    private Random r = new Random();
+    private List<Square[][]> possibleBoards;
+    private ChessBoard chessBoard;
 
     public ChessBoard move(ChessBoard chessBoard) {
 
@@ -137,6 +136,7 @@ public class ChessEngine {
         List<Square[][]> kingPossibleBoards = new ArrayList<>();
 
         //şah bir hamle öne gitme
+        //taş yeme durumu kontrol ediliyor
         if (j != 7 &&
                 (chessBoard.getSquares()[i][j + 1] == null ||
                         chessBoard.getSquares()[i][j + 1].getColor() != chessBoard.getMoveOrder())) {
@@ -147,6 +147,7 @@ public class ChessEngine {
             kingPossibleBoards.add(squares);
         }
         //şah bir hamle geriye gitme
+        //taş yeme durumu kontrol ediliyor
         if (j != 0 &&
                 (chessBoard.getSquares()[i][j - 1] == null ||
                         chessBoard.getSquares()[i][j - 1].getColor() != chessBoard.getMoveOrder())) {
@@ -157,6 +158,7 @@ public class ChessEngine {
             kingPossibleBoards.add(squares);
         }
         //şah bir hamle sola gitme
+        //taş yeme durumu kontrol ediliyor
         if (i != 0 &&
                 (chessBoard.getSquares()[i - 1][j] == null ||
                         chessBoard.getSquares()[i - 1][j].getColor() != chessBoard.getMoveOrder())) {
@@ -167,6 +169,7 @@ public class ChessEngine {
             kingPossibleBoards.add(squares);
         }
         //şah bir hamle sağa gitme
+        //taş yeme durumu kontrol ediliyor
         if (i != 7 &&
                 (chessBoard.getSquares()[i + 1][j] == null ||
                         chessBoard.getSquares()[i + 1][j].getColor() != chessBoard.getMoveOrder())) {
@@ -178,6 +181,7 @@ public class ChessEngine {
         }
 
         //şah sağ üst çapraz gitme
+        //taş yeme durumu kontrol ediliyor
         if (i != 7 && j != 7 &&
                 (chessBoard.getSquares()[i + 1][j + 1] == null ||
                         chessBoard.getSquares()[i + 1][j + 1].getColor() != chessBoard.getMoveOrder())) {
@@ -187,6 +191,7 @@ public class ChessEngine {
             kingPossibleBoards.add(squares);
         }
         //şah sol üst çapraz gitme
+        //taş yeme durumu kontrol ediliyor
         if (i != 0 && j != 7 &&
                 (chessBoard.getSquares()[i - 1][j + 1] == null ||
                         chessBoard.getSquares()[i - 1][j + 1].getColor() != chessBoard.getMoveOrder())) {
@@ -197,6 +202,7 @@ public class ChessEngine {
             kingPossibleBoards.add(squares);
         }
         //şah sağ alt çapraz gitme
+        //taş yeme durumu kontrol ediliyor
         if (i != 7 && j != 0 &&
                 (chessBoard.getSquares()[i + 1][j - 1] == null ||
                         chessBoard.getSquares()[i + 1][j - 1].getColor() != chessBoard.getMoveOrder())) {
@@ -206,6 +212,7 @@ public class ChessEngine {
             kingPossibleBoards.add(squares);
         }
         //şah sol alt çapraz gitme
+        //taş yeme durumu kontrol ediliyor
         if (i != 0 && j != 0 &&
                 (chessBoard.getSquares()[i - 1][j - 1] == null ||
                         chessBoard.getSquares()[i - 1][j - 1].getColor() != chessBoard.getMoveOrder())) {
@@ -227,6 +234,8 @@ public class ChessEngine {
         List<Square[][]> knightPossibleBoards = new ArrayList<>();
 
         //at 2 sağa 1 yukarı hareketi
+        //burada null kontrolü yapmamızın nedeni bir sonraki kontrol de null pointer exception almamak için
+        //bir sonraki kontrol ise eğer konumda kendi taşı varsa yememesi için yapılmıştır
         if (i < 6 && j != 7 &&
                 (chessBoard.getSquares()[i + 2][j + 1] == null ||
                         chessBoard.getSquares()[i + 2][j + 1].getColor() != chessBoard.getMoveOrder())) {
@@ -234,11 +243,11 @@ public class ChessEngine {
             squares[i + 2][j + 1] = chessBoard.getSquares()[i][j];
             squares[i][j] = null;
             knightPossibleBoards.add(squares);
-
-
         }
 
         //at 2 sağa 1 aşağı hareketi
+        //burada null kontrolü yapmamızın nedeni bir sonraki kontrol de null pointer exception almamak için
+        //bir sonraki kontrol ise eğer konumda kendi taşı varsa yememesi için yapılmıştır
         if (i < 6 && j != 0 &&
                 (chessBoard.getSquares()[i + 2][j - 1] == null ||
                         chessBoard.getSquares()[i + 2][j - 1].getColor() != chessBoard.getMoveOrder())) {
@@ -247,10 +256,11 @@ public class ChessEngine {
             squares[i + 2][j - 1] = chessBoard.getSquares()[i][j];
             squares[i][j] = null;
             knightPossibleBoards.add(squares);
-
         }
 
         //at 2 sola 1 yukarı hareketi
+        //burada null kontrolü yapmamızın nedeni bir sonraki kontrol de null pointer exception almamak için
+        //bir sonraki kontrol ise eğer konumda kendi taşı varsa yememesi için yapılmıştır
         if (i > 1 && j != 7 &&
                 (chessBoard.getSquares()[i - 2][j + 1] == null ||
                         chessBoard.getSquares()[i - 2][j + 1].getColor() != chessBoard.getMoveOrder())) {
@@ -260,7 +270,10 @@ public class ChessEngine {
             squares[i][j] = null;
             knightPossibleBoards.add(squares);
         }
+
         //at 2 sola 1 aşağı hareketi
+        //burada null kontrolü yapmamızın nedeni bir sonraki kontrol de null pointer exception almamak için
+        //bir sonraki kontrol ise eğer konumda kendi taşı varsa yememesi için yapılmıştır
         if (i > 1 && j != 0 &&
                 (chessBoard.getSquares()[i - 2][j - 1] == null ||
                         chessBoard.getSquares()[i - 2][j - 1].getColor() != chessBoard.getMoveOrder())) {
@@ -272,6 +285,8 @@ public class ChessEngine {
         }
 
         //at 1 sağa 2 yukarı hareketi
+        //burada null kontrolü yapmamızın nedeni bir sonraki kontrol de null pointer exception almamak için
+        //bir sonraki kontrol ise eğer konumda kendi taşı varsa yememesi için yapılmıştır
         if (i != 7 && j < 6 &&
                 (chessBoard.getSquares()[i + 1][j + 2] == null ||
                         chessBoard.getSquares()[i + 1][j + 2].getColor() != chessBoard.getMoveOrder())) {
@@ -283,6 +298,8 @@ public class ChessEngine {
 
         }
         //at 1 sola 2 yukarı hareketi
+        //burada null kontrolü yapmamızın nedeni bir sonraki kontrol de null pointer exception almamak için
+        //bir sonraki kontrol ise eğer konumda kendi taşı varsa yememesi için yapılmıştır
         if (i != 0 && j < 6 &&
                 (chessBoard.getSquares()[i - 1][j + 2] == null ||
                         chessBoard.getSquares()[i - 1][j + 2].getColor() != chessBoard.getMoveOrder())) {
@@ -291,9 +308,11 @@ public class ChessEngine {
             squares[i - 1][j + 2] = chessBoard.getSquares()[i][j];
             squares[i][j] = null;
             knightPossibleBoards.add(squares);
-
         }
+
         //at 1 sağa 2 aşağı hareketi
+        //burada null kontrolü yapmamızın nedeni bir sonraki kontrol de null pointer exception almamak için
+        //bir sonraki kontrol ise eğer konumda kendi taşı varsa yememesi için yapılmıştır
         if (i != 7 && j > 1 &&
                 (chessBoard.getSquares()[i + 1][j - 2] == null ||
                         chessBoard.getSquares()[i + 1][j - 2].getColor() != chessBoard.getMoveOrder())) {
@@ -302,9 +321,11 @@ public class ChessEngine {
             squares[i + 1][j - 2] = chessBoard.getSquares()[i][j];
             squares[i][j] = null;
             knightPossibleBoards.add(squares);
-
         }
+
         //at 1 sola 2 aşağı hareketi
+        //burada null kontrolü yapmamızın nedeni bir sonraki kontrol de null pointer exception almamak için
+        //bir sonraki kontrol ise eğer konumda kendi taşı varsa yememesi için yapılmıştır
         if (i != 0 && j > 1 &&
                 (chessBoard.getSquares()[i - 1][j - 2] == null ||
                         chessBoard.getSquares()[i - 1][j - 2].getColor() != chessBoard.getMoveOrder())) {
@@ -313,7 +334,6 @@ public class ChessEngine {
             squares[i - 1][j - 2] = chessBoard.getSquares()[i][j];
             squares[i][j] = null;
             knightPossibleBoards.add(squares);
-
         }
 
         if (chessBoard.getMoveOrder() == Color.BLACK) {

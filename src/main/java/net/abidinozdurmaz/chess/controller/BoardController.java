@@ -20,8 +20,6 @@ public class BoardController {
 
     @PostMapping("/move")
     public ChessBoard move(@RequestBody ChessBoard chessBoard) {
-
         return chessEngine.move(chessBoard);
-
     }
 }

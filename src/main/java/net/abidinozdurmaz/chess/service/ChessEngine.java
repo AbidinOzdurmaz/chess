@@ -5,6 +5,7 @@ import net.abidinozdurmaz.chess.chess.Color;
 import net.abidinozdurmaz.chess.chess.Piece;
 import net.abidinozdurmaz.chess.chess.Square;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -12,7 +13,7 @@ import java.util.Random;
 @Service
 public class ChessEngine {
 
-    private Random r = new Random();
+    private final Random r = new Random();
     private List<Square[][]> possibleBoards;
     private ChessBoard chessBoard;
 
@@ -45,6 +46,10 @@ public class ChessEngine {
                             }
                             case KNIGHT: {
                                 possibleBoards.addAll(calculateKnightMoves(i, j));
+                                break;
+                            }
+                            case ROOK: {
+                                possibleBoards.addAll(calculateRookMoves(i, j));
                                 break;
                             }
                         }
@@ -342,6 +347,115 @@ public class ChessEngine {
         return knightPossibleBoards;
     }
 
+    private List<Square[][]> calculateRookMoves(int i, int j) {
+
+        List<Square[][]> rookPossibleBoards = new ArrayList<>();
+
+        //yukarı hamlesi döngüyle birlikte muhtemel yukarı hamleleri sağlıyoruz
+
+        if (j != 7) {
+
+            for (int k = j + 1; k <= 7; k++) {
+                boolean temp = true;
+                if (chessBoard.getSquares()[i][k] == null ||
+                        chessBoard.getSquares()[i][k].getColor() != chessBoard.getMoveOrder()) {
+
+                    Square[][] squares = chessBoard.cloneBoard();
+                    squares[i][k] = chessBoard.getSquares()[i][j];
+                    squares[i][j] = null;
+                    rookPossibleBoards.add(squares);
+
+                    //eğer taş boş diye yerleştiyse bir önü de boş olabilir bunu kontrol etmek için
+                    //döngüyü devam ettiririz. Fakat önü boş değilse rakibin taşı var demektir
+                    //bu durumda rakibin taşını alır daha ileri gidemez bu yüzden döngüyü bitirmeliyiz
+                    if (chessBoard.getSquares()[i][k] != null) {
+                        temp = false;
+                    } else temp = true;
+                }
+                if (temp) break;
+            }
+
+        }
+
+        //aşağı hamle
+
+        if (j != 0) {
+
+            for (int k = j - 1; k >= 0; k--) {
+                boolean temp = true;
+
+                if (chessBoard.getSquares()[i][k] == null ||
+                        chessBoard.getSquares()[i][k].getColor() != chessBoard.getMoveOrder()) {
+
+                    Square[][] squares = chessBoard.cloneBoard();
+                    squares[i][k] = chessBoard.getSquares()[i][j];
+                    squares[i][j] = null;
+                    rookPossibleBoards.add(squares);
+
+                    if (chessBoard.getSquares()[i][k] != null) {
+                        temp = false;
+                    } else temp = true;
+                }
+                if (temp) break;
+
+            }
+
+        }
+
+        //sağa hamle
+
+        if (i != 7) {
+            for (int k = i + 1; k <= 7; k++) {
+
+                boolean temp = true;
+
+                if (chessBoard.getSquares()[k][j] == null ||
+                        chessBoard.getSquares()[k][j].getColor() != chessBoard.getMoveOrder()) {
+
+                    Square[][] squares = chessBoard.cloneBoard();
+                    squares[k][j] = chessBoard.getSquares()[i][j];
+                    squares[i][j] = null;
+                    rookPossibleBoards.add(squares);
+
+                    if (chessBoard.getSquares()[k][j] != null) {
+                        temp = false;
+                    } else temp = true;
+                }
+                if (temp) break;
+
+            }
+        }
+
+        //sola hamle
+
+        if (i != 0) {
+            for (int k = i - 1; k >= 0; k--) {
+                boolean temp = true;
+
+                if (chessBoard.getSquares()[k][j] == null ||
+                        chessBoard.getSquares()[k][j].getColor() != chessBoard.getMoveOrder()) {
+
+                    Square[][] squares = chessBoard.cloneBoard();
+                    squares[k][j] = chessBoard.getSquares()[i][j];
+                    squares[i][j] = null;
+                    rookPossibleBoards.add(squares);
+
+                    if (chessBoard.getSquares()[k][j] != null) {
+                        temp = false;
+                    } else temp = true;
+                }
+                if (temp) break;
+
+            }
+        }
+
+        if (chessBoard.getMoveOrder() == Color.BLACK) {
+            return spinBoard(rookPossibleBoards);
+        }
+        return rookPossibleBoards;
+    }
+
+
     private Square[][] guess(List<Square[][]> possibleBoards) {
         if (possibleBoards.size() > 0) {
             int index = r.nextInt(possibleBoards.size());
@@ -382,9 +496,10 @@ public class ChessEngine {
         return sq;
     }
 
+    /*
     private void movePiece(Square[][] squares, int startX, int startY, int endX, int endY) {
         squares[endX][endY] = this.chessBoard.getSquares()[startX][startX];
         squares[startX][startY] = null;
     }
-
+    */
 }

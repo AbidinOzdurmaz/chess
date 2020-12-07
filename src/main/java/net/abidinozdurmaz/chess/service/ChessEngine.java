@@ -734,4 +734,43 @@ public class ChessEngine {
 
     }
 
+    public int calculatePoints(ChessBoard chessBoard) {
+        int points=0;
+        for (int i = 0; i < chessBoard.getSquares().length; i++) {
+            for (int j = 0; j < chessBoard.getSquares().length; j++) {
+                if (chessBoard.getSquares()[i][j] != null) {
+
+                    if (chessBoard.getMoveOrder() != chessBoard.getSquares()[i][j].getColor()) {
+
+                        switch (chessBoard.getSquares()[i][j].getPiece()) {
+                            case QUEEN: {
+                                points+=8;
+                                break;
+                            }
+                            case KING: {
+                                points+=100;
+                                break;
+                            }
+                            case BISHOP:
+                            case KNIGHT: {
+                                points+=3;
+                                break;
+                            }
+                            case PAWN:{
+                                points+=1;
+                                break;
+                            }
+                            case ROOK:{
+                                points+=5;
+                                break;
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+
+        return points;
+    }
 }

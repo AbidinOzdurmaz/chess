@@ -734,43 +734,59 @@ public class ChessEngine {
 
     }
 
-    public int calculatePoints(ChessBoard chessBoard) {
-        int points=0;
+    public int[] calculatePoints(ChessBoard chessBoard) {
+        int[] points = new int[2];
+        int whitePoints=0,blackPoints=0;
+
         for (int i = 0; i < chessBoard.getSquares().length; i++) {
             for (int j = 0; j < chessBoard.getSquares().length; j++) {
                 if (chessBoard.getSquares()[i][j] != null) {
 
-                    if (chessBoard.getMoveOrder() != chessBoard.getSquares()[i][j].getColor()) {
-
                         switch (chessBoard.getSquares()[i][j].getPiece()) {
                             case QUEEN: {
-                                points+=8;
+                                if (chessBoard.getMoveOrder()==Color.BLACK){
+                                    blackPoints+=8;
+                                }
+                                else whitePoints+=8;
                                 break;
                             }
                             case KING: {
-                                points+=100;
+                                if (chessBoard.getMoveOrder()==Color.BLACK){
+                                    blackPoints+=100;
+                                }
+                                else whitePoints+=100;
                                 break;
                             }
                             case BISHOP:
                             case KNIGHT: {
-                                points+=3;
+                                if (chessBoard.getMoveOrder()==Color.BLACK){
+                                    blackPoints+=3;
+                                }
+                                else whitePoints+=3;
                                 break;
                             }
                             case PAWN:{
-                                points+=1;
+                                if (chessBoard.getMoveOrder()==Color.BLACK){
+                                    blackPoints+=1;
+                                }
+                                else whitePoints+=1;
                                 break;
                             }
                             case ROOK:{
-                                points+=5;
+                                if (chessBoard.getMoveOrder()==Color.BLACK){
+                                    blackPoints+=5;
+                                }
+                                else whitePoints+=5;
                                 break;
                             }
 
                         }
                     }
-                }
+
             }
         }
-
+        points[0]=whitePoints;
+        points[1]=blackPoints;
         return points;
     }
 }
